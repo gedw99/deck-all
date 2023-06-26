@@ -16,8 +16,8 @@ include $(MAKE_FSPATH)/gio.mk
 include $(MAKE_FSPATH)/hcloud.mk
 include $(MAKE_FSPATH)/contabo.mk
 
-# https://github.com/ajstarks/deck
-GIT_SRC_NAME=deck
+# https://github.com/ajstarks/giocanvas
+GIT_SRC_NAME=giocanvas
 GIT_SRC_VERSION=master
 GIT_SRC_UPSTREAM_ORG=ajstarks
 #GIT_SRC_UPSTREAM_FSNAME=$(PWD)
@@ -38,12 +38,13 @@ this-dep-tool:
 	
 
 # pick go src ( defaults to PWD)
-#GO_SRC_FSPATH=$(WORK_FSPATH)
-#GO_SRC_NAME=deck
+#GO_SRC_FSPATH=$(WORK_FSPATH)/gcdeck
+#GO_SRC_NAME=gcdeck
 
 # pick gio src ( defaults to PWD)
-#GIO_SRC_FSPATH=$(WORK_FSPATH)
-#GIO_SRC_NAME=bookmark-sync
+GIO_SRC_FSPATH=$(WORK_FSPATH)/gcdeck
+GIO_SRC_NAME=gcdeck
+GIO_SRC_GO_BIN_NAME=gotip
 
 # pick go target !
 BIN_GO=$(GO_RUN_FSPATH)
@@ -66,32 +67,15 @@ print:
 	@echo ""
 
 build-go:
-	$(MAKE) GO_SRC_GO_BIN_NAME=gotip GO_SRC_FSPATH=$(WORK_FSPATH)/cmd/deckd GO_SRC_NAME=deckd go-build
-	$(MAKE) GO_SRC_GO_BIN_NAME=gotip GO_SRC_FSPATH=$(WORK_FSPATH)/cmd/deckinfo GO_SRC_NAME=deckinfo go-build
-	$(MAKE) GO_SRC_GO_BIN_NAME=gotip GO_SRC_FSPATH=$(WORK_FSPATH)/cmd/deckweb GO_SRC_NAME=deckweb go-build
-	
-	$(MAKE) GO_SRC_GO_BIN_NAME=gotip GO_SRC_FSPATH=$(WORK_FSPATH)/cmd/pdfdeck GO_SRC_NAME=pdfdeck go-build
-	$(MAKE) GO_SRC_GO_BIN_NAME=gotip GO_SRC_FSPATH=$(WORK_FSPATH)/cmd/pngdeck GO_SRC_NAME=pngdeck go-build
-	$(MAKE) GO_SRC_GO_BIN_NAME=gotip GO_SRC_FSPATH=$(WORK_FSPATH)/cmd/svgdeck GO_SRC_NAME=svgdeck go-build
-	
+	$(MAKE) go-build
 build-go-all:
-	
-	$(MAKE) GO_SRC_GO_BIN_NAME=gotip GO_SRC_FSPATH=$(WORK_FSPATH)/cmd/deckd GO_SRC_NAME=deckd go-build-all
-	$(MAKE) GO_SRC_GO_BIN_NAME=gotip GO_SRC_FSPATH=$(WORK_FSPATH)/cmd/deckinfo GO_SRC_NAME=deckinfo go-build-all
-	$(MAKE) GO_SRC_GO_BIN_NAME=gotip GO_SRC_FSPATH=$(WORK_FSPATH)/cmd/deckweb GO_SRC_NAME=deckweb go-build-all
-	
-	$(MAKE) GO_SRC_GO_BIN_NAME=gotip GO_SRC_FSPATH=$(WORK_FSPATH)/cmd/pdfdeck GO_SRC_NAME=pdfdeck go-build-all
-	$(MAKE) GO_SRC_GO_BIN_NAME=gotip GO_SRC_FSPATH=$(WORK_FSPATH)/cmd/pngdeck GO_SRC_NAME=pngdeck go-build-all
-	$(MAKE) GO_SRC_GO_BIN_NAME=gotip GO_SRC_FSPATH=$(WORK_FSPATH)/cmd/svgdeck GO_SRC_NAME=svgdeck go-build-all
-	
+	$(MAKE) go-build-all
 run-go:
 	$(MAKE) go-run
 
 build-gio:
-
-
-build-gio-all:
-	
+	$(MAKE) gio-build
+	#$(MAKE) gio-build-release
 run-gio:
 	$(MAKE) gio-run
 

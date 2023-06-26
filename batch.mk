@@ -17,12 +17,14 @@ batch-git:
 	cd deck && $(MAKE) git-upstream-clone
 	cd deckfonts && $(MAKE) git-upstream-clone
 	cd deckviz && $(MAKE) git-upstream-clone
+	cd giocanvas && $(MAKE) git-upstream-clone
 	
 batch-git-del:
 	cd desksh && $(MAKE) git-upstream-clone-del
 	cd deck && $(MAKE) git-upstream-clone-del
 	cd deckfonts && $(MAKE) git-upstream-clone-del
 	cd deckviz && $(MAKE) git-upstream-clone-del
+	cd giocanvas && $(MAKE) git-upstream-clone-del
 	
 	
 ### Build
@@ -38,31 +40,42 @@ batch-build:
 	cd decksh && $(MAKE) build-go
 	cd deck && $(MAKE) build-go
 	cd deck && $(MAKE) build-gio
+	cd giocanvas && $(MAKE) build-gio
 batch-build-all:
 	cd decksh && $(MAKE) build-go-all
 	cd deck && $(MAKE) build-go-all
 	cd deck && $(MAKE) build-gio-all
+	cd giocanvas && $(MAKE) build-gio-all
 
 
 ### DIST
 
 batch-dist:
+	mkdir -p $(BIN_FSPATH)
 	cp -r decksh/decksh__ajstarks/cmd/decksh/.bin/gobuild/* $(BIN_FSPATH)
 
 	cp -r deck/deck__ajstarks/cmd/deckd/.bin/gobuild/* $(BIN_FSPATH)
 	cp -r deck/deck__ajstarks/cmd/deckinfo/.bin/gobuild/* $(BIN_FSPATH)
 	cp -r deck/deck__ajstarks/cmd/deckweb/.bin/gobuild/* $(BIN_FSPATH)
 	cp -r deck/deck__ajstarks/cmd/deckweb/.bin/gobuild/* $(BIN_FSPATH)
-	cp -r deck/deck__ajstarks/cmd/fcdeck/.bin/gobuild/* $(BIN_FSPATH)
-	cp -r deck/deck__ajstarks/cmd/gcdeck/.bin/gobuild/* $(BIN_FSPATH)
+	#cp -r deck/deck__ajstarks/cmd/fcdeck/.bin/gobuild/* $(BIN_FSPATH)
+	#cp -r deck/deck__ajstarks/cmd/gcdeck/.bin/gobuild/* $(BIN_FSPATH)
 	cp -r deck/deck__ajstarks/cmd/pdfdeck/.bin/gobuild/* $(BIN_FSPATH)
 	cp -r deck/deck__ajstarks/cmd/pngdeck/.bin/gobuild/* $(BIN_FSPATH)
 	cp -r deck/deck__ajstarks/cmd/svgdeck/.bin/gobuild/* $(BIN_FSPATH)
 	
-	
+	cp -r giocanvas/giocanvas__ajstarks/gcdeck/.bin/giobuild/* $(BIN_FSPATH)
 
-batche-dist-del:
+batch-dist-del:
 	rm -rf $(BIN_FSPATH)
+
+### RELEASE
+
+batch-release:
+	go install github.com/tcnksm/ghr@latest
+
+
+
 
 deckd-run:
 	# -listen Address:port (default: localhost:1958)
@@ -71,7 +84,6 @@ deckd-run:
 	# http://localhost:8080/
 
 	# https://github.com/ajstarks/deck/tree/master/cmd/deckd
-
 
 
 decksh-run:
