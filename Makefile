@@ -39,64 +39,91 @@ this-git-all:
 this-dep-tool:
 
 
-# pick go src ( defaults to PWD )
-GO_SRC_FSPATH=$(WORK_FSPATH)
-GO_SRC_NAME=fingerprint
-GO_SRC_GO_BIN_NAME=gotip
 
-# pick gio src ( defaults to PWD )
-#GIO_SRC_FSPATH=$(WORK_FSPATH)
-#GIO_SRC_NAME=bookmark-sync
-#GIO_SRC_GO_BIN_NAME=gotip
+# batch on the git repos.
+include $(PWD)/batch.mk
 
-# pick go target !
-BIN_GO=$(GO_RUN_FSPATH)
-#BIN_GO=$(GO_RUN_RELEASE_FSPATH)
+### BINARIES
+export PATH:=$(PWD)/.bin/darwin-amd64:$(PATH)
 
-# pick gio target !
-BIN_GIO=$(GIO_RUN_FSPATH)
-#BIN_GIO=$(GIO_RUN_RELEASE_FSPATH)
-
-print:
-	@echo ""
-	@echo "-- GO --"
-	@echo "GO_RUN_FSPATH:             $(GO_RUN_FSPATH)"
-	@echo "GO_RUN_RELEASE_FSPATH:     $(GO_RUN_RELEASE_FSPATH)"
-
-	@echo ""
-	@echo "-- GIO --"
-	@echo "GIO_RUN_FSPATH:            $(GIO_RUN_FSPATH)"
-	@echo "GIO_RUN_RELEASE_FSPATH:    $(GIO_RUN_RELEASE_FSPATH)"
-	@echo ""
-
-build-go:
-	$(MAKE) go-build
-run-go:
-	$(MAKE) go-run
-
-build-gio:
-	$(MAKE) gio-build
-	#$(MAKE) gio-build-release
-run-gio:
-	$(MAKE) gio-run
-
-
+### FONTS
+export DECKFONTS=$(PWD)/deckfonts/deckfonts__ajstarks
 
 ARGS=-address 127.0.0.1:8080 -verbose
 FILE=$(PWD)/test.txt
 
-# go
-0:
-	$(BIN_GO)
-1:
-	$(BIN_GO) -h
-2:
-	touch $(FILE)
-	$(BIN_GO) $(ARGS) $(FILE)
 
-# gio
-10:
-	open $(BIN_GIO)
+### EX
+
+ex-test:
+	cd $(PWD)/decksh/decksh__ajstarks && decksh test.dsh > test.xml
+	
+	# pdfdeck ( works )
+	#cd $(PWD)/decksh/decksh__ajstarks && pdfdeck -sans NotoSans-Regular test.xml && open test.pdf
+
+	# svgdeck ( works )
+	#cd $(PWD)/decksh/decksh__ajstarks && svgdeck -sans NotoSans-Regular test.xml
+
+	# gcdeck ( bursted )
+	# page 8 or 9 it then pages forward non stop when you click. same as before.
+	cd $(PWD)/decksh/decksh__ajstarks && gcdeck -pagesize A4 test.xml
+
+ex-short:
+	# need deck font. Fix that later
+	# from $(PWD)/decksh/decksh__ajstarks/doc/mkdeck-short.sh
+	#cd $(PWD)/decksh/decksh__ajstarks/doc && decksh decksh-short.dsh | pdfdeck $* -pagesize 800,450 -sans GillSans -mono NotoMono-Regular -serif GillSans-Italic -stdout - > decksh-short.pdf
+	
+	cd $(PWD)/decksh/decksh__ajstarks/doc && decksh decksh-short.dsh | pdfdeck $* -pagesize 800,450 -sans NotoSans-Regular -mono NotoMono-Regular -serif NotoMono-Regular -stdout - > decksh-short.pdf
+
+	# wow its nice too.
+	# links work 
+	open $(PWD)/decksh/decksh__ajstarks/doc/decksh-short.pdf
+
+VIZ_FSPATH=$(PWD)/deckviz/deckviz__ajstarks/bauhaus-lamp
+VIZ_NAME=lamp
+
+ex-viz:
+	cd $(VIZ_FSPATH) && decksh $(VIZ_NAME).dsh | pdfdeck $* -pagesize 800,450 -sans NotoSans-Regular -mono NotoMono-Regular -serif NotoMono-Regular -stdout - > $(VIZ_NAME).pdf
+	open $(VIZ_FSPATH)/$(VIZ_NAME).pdf
+
+deckd:
+	# try to use server and web gui, so we can quickly browse.
+
+	# Its is ONLY designed for viewing already rednered to xml stuff
+	deckd -dir $(VIZ_FSPATH) -listen localhost:8080
+	# http://localhost:8080/
+
+	# http://localhost:8080/deck/
+
+animate:
+	# see https://github.com/ajstarks/openvg/blob/master/go-client/clock/clock.go
+	# Its shitty. think about it more.
+
+users:
+	# looks like i can use this to wrap the deck commands directly.
+	# a NATS stream might be better as its more flexible.
+	# Cool this will be that deckd web can show the output as stuff streams to the disk that deckd is looking at.
+	# can add NATS to decks and signal it that a file has changed, and it can then tell web viewers via an event
+	# Yomorun presence system using web sockets / web transprt to sent event about what changed, and then Web client pulls it.
+	## its a bit like basic htmx. 
+	# Its clean and simple
+	# can transpprt xml and pds, etc via NAST obj store and out to disk where ever that stream leads to.
+	
+	# https://github.com/harmonicinc-com/joebot 
+	# its actually works and can punch throw.
+	
+
+dev:
+	## this is where we diff the udiff
+	# can run nats leaf on each devs system so that we dont need to worry about hole punching.
+	# again nast streams can do it.
+	# nats or https://github.com/nf/nux/blob/main/dev.go#L17
+
+plugins:
+	# capsule 
+	# devs / users can write plugins.
+	# renderers to twitter, email, youtube, other. Mattermost has some.
+
 
 run-caddy:
 	# no caddyfile needed
@@ -110,7 +137,7 @@ run-overmnd:
 start-overmind:
 	# demon
 	$(MAKE) overmind-daemon-ops-start
-	# need a eb gui !!
+	# need a web gui !!
 
 	
 

@@ -1,8 +1,12 @@
-# deck
+# deck-all
+
+Brings together the deck bits....
 
 https://github.com/ajstarks/decksh
 
 https://github.com/ajstarks/giocanvas
+
+---
 
 Detlef Stern <ds@zettelstore.de>
 
