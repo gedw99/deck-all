@@ -17,9 +17,10 @@ I then use NATS to run the pipeline. https://github.com/choria-io/asyncjobs for 
 ## Build targets
 
 OS: windows, darwin, linux, js, wasi1p
+
 ARCH: amd64, arm64
 
-TODO: linux arm64
+* TODO: linux arm64
 
 ```sh
 ├── darwin_amd64
