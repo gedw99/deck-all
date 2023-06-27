@@ -109,11 +109,11 @@ TODO:
 TODO: flatten build outputs so they can be uploaded to github releases
 
 
-## WASM RUNNERS
+## WASM Runners
 
 WASM Runners: https://github.com/teamortix/golang-wasm
 
-## WASI runners
+## WASI Runners
 
 https://github.com/stealthrocket/wasi-go/tree/main/cmd/wasirun
 
@@ -132,7 +132,7 @@ https://codeberg.org/t73fde/sxhtml
 
 ## Reactivity
 
-HTMX patterns to be add, so that users can interact with the decks at runtime.
+TODO: HTMX patterns to be added, so that users can interact with the decks at runtime.
 
 https://htmx.org/
 
