@@ -40,6 +40,7 @@ this-dep-tool:
 # pick go src ( defaults to PWD)
 #GO_SRC_FSPATH=$(WORK_FSPATH)/gcdeck
 #GO_SRC_NAME=gcdeck
+#GO_SRC_GO_BIN_NAME=gotip
 
 # pick gio src ( defaults to PWD)
 GIO_SRC_FSPATH=$(WORK_FSPATH)/gcdeck
@@ -66,6 +67,12 @@ print:
 	@echo "GIO_RUN_RELEASE_FSPATH:    $(GIO_RUN_RELEASE_FSPATH)"
 	@echo ""
 
+
+build-clean:
+	$(MAKE) go-clean-bin-ls
+	$(MAKE) go-clean-bin-run
+
+
 build-go:
 	$(MAKE) go-build
 build-go-all:
@@ -73,9 +80,13 @@ build-go-all:
 run-go:
 	$(MAKE) go-run
 
+
+
 build-gio:
 	$(MAKE) gio-build
 	#$(MAKE) gio-build-release
+build-gio-all:
+	$(MAKE) gio-build-all
 run-gio:
 	$(MAKE) gio-run
 

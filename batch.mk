@@ -36,19 +36,22 @@ CMD_BUILD=go-build
 batch-build:
 	mkdir -p $(BIN_FSPATH)
 	# do it alphabetically and all platform
-
 	cd decksh && $(MAKE) build-go
 	cd deck && $(MAKE) build-go
-	cd deck && $(MAKE) build-gio
 	cd giocanvas && $(MAKE) build-gio
 batch-build-all:
 	cd decksh && $(MAKE) build-go-all
 	cd deck && $(MAKE) build-go-all
-	cd deck && $(MAKE) build-gio-all
 	cd giocanvas && $(MAKE) build-gio-all
-
+batch-build-clean:
+	cd decksh && $(MAKE) build-clean
+	cd deck && $(MAKE) build-clean
+	cd giocanvas && $(MAKE) build-clean
 
 ### DIST
+
+batch-dist-print:
+	tree  $(BIN_FSPATH)
 
 batch-dist:
 	mkdir -p $(BIN_FSPATH)
@@ -75,7 +78,7 @@ DIST_FSPATH=$(PWD)/.release
 
 batch-release-trans:
 	# transform into flat folders. github only allow files not folders.
-	
+
 batch-release:
 	go install github.com/tcnksm/ghr@v0.16.0
 

@@ -40,6 +40,7 @@ this-dep-tool:
 # pick go src ( defaults to PWD)
 GO_SRC_FSPATH=$(WORK_FSPATH)/cmd/decksh
 GO_SRC_NAME=decksh
+GO_SRC_GO_BIN_NAME=gotip
 
 # pick gio src ( defaults to PWD)
 #GIO_SRC_FSPATH=$(WORK_FSPATH)
@@ -69,6 +70,10 @@ build-go:
 	$(MAKE) go-build
 build-go-all:
 	$(MAKE) go-build-all
+build-clean:
+	$(MAKE) go-clean-bin-ls
+	$(MAKE) go-clean-bin-run
+
 run-go:
 	$(MAKE) go-run
 
