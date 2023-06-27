@@ -38,9 +38,9 @@ this-dep-tool:
 	
 
 # pick go src ( defaults to PWD)
-#GO_SRC_FSPATH=$(WORK_FSPATH)/gcdeck
-#GO_SRC_NAME=gcdeck
-#GO_SRC_GO_BIN_NAME=gotip
+GO_SRC_FSPATH=$(WORK_FSPATH)/gcdeck
+GO_SRC_NAME=gcdeck
+GO_SRC_GO_BIN_NAME=gotip
 
 # pick gio src ( defaults to PWD)
 GIO_SRC_FSPATH=$(WORK_FSPATH)/gcdeck

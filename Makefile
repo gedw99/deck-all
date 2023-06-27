@@ -7,6 +7,7 @@
 MAKE_FSPATH=$(SC_MAKE_FSPATH)
 include $(MAKE_FSPATH)/help.mk
 include $(MAKE_FSPATH)/git.mk
+include $(MAKE_FSPATH)/os.mk
 
 include $(MAKE_FSPATH)/caddy.mk
 include $(MAKE_FSPATH)/go.mk
@@ -50,7 +51,8 @@ all: batch-all
 
 ### BINARIES ( pick your OS ad ARCH )
 DIST_FSPATH=$(PWD)/.bin/darwin_amd64
-export PATH:=$(DIST_FSPATH):$(DIST_FSPATH)/gcdeck.app/Contents/MacOS:$(PATH)
+#export PATH:=$(DIST_FSPATH):$(DIST_FSPATH)/gcdeck.app/Contents/MacOS:$(PATH)
+export PATH:=$(DIST_FSPATH):$(PATH)
 
 ### FONTS
 # TODO: release them, so easy for users.

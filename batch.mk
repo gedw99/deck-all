@@ -46,13 +46,14 @@ batch-build:
 batch-build-all:
 	cd decksh && $(MAKE) build-go-all
 	cd deck && $(MAKE) build-go-all
+	cd giocanvas && $(MAKE) build-go-all
 	cd giocanvas && $(MAKE) build-gio-all
 batch-build-clean:
 	cd decksh && $(MAKE) build-clean
 	cd deck && $(MAKE) build-clean
 	cd giocanvas && $(MAKE) build-clean
 
-### DIST
+### BIN
 
 batch-bin-print:
 	tree  $(BATCH_BIN_FSPATH)
@@ -71,6 +72,7 @@ batch-bin:
 	cp -r deck/deck__ajstarks/cmd/pngdeck/.bin/gobuild/* $(BATCH_BIN_FSPATH)
 	cp -r deck/deck__ajstarks/cmd/svgdeck/.bin/gobuild/* $(BATCH_BIN_FSPATH)
 	
+
 	cp -r giocanvas/giocanvas__ajstarks/gcdeck/.bin/giobuild/* $(BATCH_BIN_FSPATH)
 
 batch-bin-del:
@@ -85,6 +87,13 @@ BATCH_RELEASE_VER=0.0.0
 
 batch-release-trans:
 	# transform everything in .bin into flat file structure and into .release
+
+	# folders like .app and .web have to be zipped. Unzip it on the oether side
+
+	# Later get pkg and msi working..
+
+	# OS_ARCH_binname.ext is best...
+
 
 batch-release:
 	# push to github releases
