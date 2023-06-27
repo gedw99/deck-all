@@ -27,7 +27,6 @@ GIT_SRC_UPSTREAM_ORG=gedw99
 GIT_SRC_ORIGIN_FSNAME=$(PWD)
 
 
-
 # Pick source stream
 #WORK_FSPATH=$(PWD)
 #WORK_FSPATH=$(PWD)/$(GIT_SRC_UPSTREAM_FSNAME)
@@ -43,60 +42,80 @@ this-dep-tool:
 # batch on the git repos.
 include $(PWD)/batch.mk
 
-### BINARIES
+### BINARIES ( pick your OS ad ARCH)
 DIST_FSPATH=$(PWD)/.bin/darwin_amd64
 export PATH:=$(DIST_FSPATH):$(DIST_FSPATH)/gcdeck.app/Contents/MacOS:$(PATH)
 
 ### FONTS
+# TODO: release them, so easy for users.
 export DECKFONTS=$(PWD)/deckfonts/deckfonts__ajstarks
 
-ARGS=-address 127.0.0.1:8080 -verbose
-FILE=$(PWD)/test.txt
 
-### BIN
+### HELP
 
-gcdeck:
+decksh-help:
+	decksh -h
+pdfdeck-help:
+	pdfdeck -h
+svgdeck-help:
+	svgdeck -h
+gcdeck-help:
 	gcdeck -h
 
+### EXAMPLES
 
-### EX
+EX_OUT=$(PWD)/.out
 
 ex-test:
-	cd $(PWD)/decksh/decksh__ajstarks && decksh test.dsh > test.xml
+	mkdir -p $(EX_OUT)
+	@echo ""
+	@echo "decksh > xml"
+	cd $(PWD)/decksh/decksh__ajstarks && decksh test.dsh > $(EX_OUT)/test.xml
 	
 	# pdfdeck ( works )
-	#cd $(PWD)/decksh/decksh__ajstarks && pdfdeck -sans NotoSans-Regular test.xml && open test.pdf
+	@echo ""
+	@echo "pdfdeck > pdf"
+	cd $(PWD)/decksh/decksh__ajstarks && pdfdeck -sans NotoSans-Regular -outdir $(EX_OUT) $(EX_OUT)/test.xml && open $(EX_OUT)/test.pdf
 
 	# svgdeck ( works )
-	#cd $(PWD)/decksh/decksh__ajstarks && svgdeck -sans NotoSans-Regular test.xml
+	@echo ""
+	@echo "svgdeck > svg"
+	cd $(PWD)/decksh/decksh__ajstarks && svgdeck -sans NotoSans-Regular -outdir $(EX_OUT) $(EX_OUT)/test.xml && open $(EX_OUT)/test-00001.svg
 
-	# gcdeck ( bursted )
-	# page 8 or 9 it then pages forward non stop when you click. same as before.
+	# gcdeck ( works )
+	# ISSUE: window resizing needs to be responsive.
+	# ISSUE: no scrolling, so content drops off the edge.
+	@echo ""
+	@echo "gcdeck > app"
 	cd $(PWD)/decksh/decksh__ajstarks && gcdeck -pagesize Widescreen test.xml
 
 ex-short:
 	# need deck font. Fix that later
 	# from $(PWD)/decksh/decksh__ajstarks/doc/mkdeck-short.sh
-	#cd $(PWD)/decksh/decksh__ajstarks/doc && decksh decksh-short.dsh | pdfdeck $* -pagesize 800,450 -sans GillSans -mono NotoMono-Regular -serif GillSans-Italic -stdout - > decksh-short.pdf
+
+	# Pick your fonts !
+	@echo ""
+	@echo "decksh > pdf"
+
+	# broken for now...
+	#cd $(PWD)/decksh/decksh__ajstarks/doc && decksh decksh-short.dsh | pdfdeck $* -pagesize 800,450 -sans GillSans -mono NotoMono-Regular -serif GillSans-Italic -stdout - > $(EX_OUT)/decksh-short.pdf
 	
-	cd $(PWD)/decksh/decksh__ajstarks/doc && decksh decksh-short.dsh | pdfdeck $* -pagesize 800,450 -sans NotoSans-Regular -mono NotoMono-Regular -serif NotoMono-Regular -stdout - > decksh-short.pdf
+	cd $(PWD)/decksh/decksh__ajstarks/doc && decksh decksh-short.dsh | pdfdeck $* -pagesize 800,450 -sans NotoSans-Regular -mono NotoMono-Regular -serif NotoMono-Regular -stdout - > $(EX_OUT)/decksh-short.pdf
 
-	# wow its nice too.
-	# links work 
-	open $(PWD)/decksh/decksh__ajstarks/doc/decksh-short.pdf
+	open $(EX_OUT)/decksh-short.pdf
 
-VIZ_FSPATH=$(PWD)/deckviz/deckviz__ajstarks/bauhaus-lamp
-VIZ_NAME=lamp
+EX_VIZ_FSPATH=$(PWD)/deckviz/deckviz__ajstarks/bauhaus-lamp
+EX_VIZ_NAME=lamp
 
 ex-viz:
-	cd $(VIZ_FSPATH) && decksh $(VIZ_NAME).dsh | pdfdeck $* -pagesize 800,450 -sans NotoSans-Regular -mono NotoMono-Regular -serif NotoMono-Regular -stdout - > $(VIZ_NAME).pdf
-	open $(VIZ_FSPATH)/$(VIZ_NAME).pdf
+	cd $(EX_VIZ_FSPATH) && decksh $(EX_VIZ_NAME).dsh | pdfdeck $* -pagesize 800,450 -sans NotoSans-Regular -mono NotoMono-Regular -serif NotoMono-Regular -stdout - > $(EX_VIZ_NAME).pdf
+	open $(EX_VIZ_FSPATH)/$(EX_VIZ_NAME).pdf
 
-deckd:
+deckd-run:
 	# try to use server and web gui, so we can quickly browse.
 
 	# Its is ONLY designed for viewing already rednered to xml stuff
-	deckd -dir $(VIZ_FSPATH) -listen localhost:8080
+	deckd -dir $(EX_VIZ_FSPATH) -listen localhost:8080
 	# http://localhost:8080/
 
 	# http://localhost:8080/deck/
