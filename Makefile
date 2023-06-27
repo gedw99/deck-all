@@ -44,13 +44,19 @@ this-dep-tool:
 include $(PWD)/batch.mk
 
 ### BINARIES
-export PATH:=$(PWD)/.bin/darwin-amd64:$(PATH)
+DIST_FSPATH=$(PWD)/.bin/darwin_amd64
+export PATH:=$(DIST_FSPATH):$(DIST_FSPATH)/gcdeck.app/Contents/MacOS:$(PATH)
 
 ### FONTS
 export DECKFONTS=$(PWD)/deckfonts/deckfonts__ajstarks
 
 ARGS=-address 127.0.0.1:8080 -verbose
 FILE=$(PWD)/test.txt
+
+### BIN
+
+gcdeck:
+	gcdeck -h
 
 
 ### EX
@@ -66,7 +72,7 @@ ex-test:
 
 	# gcdeck ( bursted )
 	# page 8 or 9 it then pages forward non stop when you click. same as before.
-	cd $(PWD)/decksh/decksh__ajstarks && gcdeck -pagesize A4 test.xml
+	cd $(PWD)/decksh/decksh__ajstarks && gcdeck -pagesize Widescreen test.xml
 
 ex-short:
 	# need deck font. Fix that later
@@ -110,13 +116,13 @@ users:
 	# can transpprt xml and pds, etc via NAST obj store and out to disk where ever that stream leads to.
 	
 	# https://github.com/harmonicinc-com/joebot 
-	# its actually works and can punch throw.
+	# its actually works and can punch through.
 	
 
 dev:
 	## this is where we diff the udiff
 	# can run nats leaf on each devs system so that we dont need to worry about hole punching.
-	# again nast streams can do it.
+	# again NATS streams can do it.
 	# nats or https://github.com/nf/nux/blob/main/dev.go#L17
 
 plugins:

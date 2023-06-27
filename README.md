@@ -15,17 +15,17 @@ Deck is well designed in that each part can use STD IO and so can be piped in a 
 
 For Security reasons, I compile the processors to WASM as well as traditional targets. 
 
-To server the WASM and WASI19 and WASI2P, i use https://github.com/stealthrocket/wasi-go/tree/main/cmd/wasirun to wrap the wasi with a host runner.
+To server the WASM and WASI19 and WASI2P, i use https://github.com/stealthrocket/wasi-go/tree/main/cmd/wasirun to wrap the wasi with a host runner. This currently requires GoTip.
 
 To run the pipelines, I use NATS.
 
-To Server the pipelines, I use https://github.com/choria-io/asyncjobs to run them on a schedule or continuously jobs.
+To Server the pipelines, I use https://github.com/choria-io/asyncjobs to run them on a schedule or as continuously jobs.
 
 ## Build targets
 
 OS: windows, darwin, linux
 
-ARCH: amd64, arm64, wasm, web_wasm, js
+ARCH: amd64, arm64, js, wasm, wasip1, wasip2, web_wasm
 
 TODO: 
 - linux arm64
