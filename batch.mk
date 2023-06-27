@@ -71,8 +71,19 @@ batch-dist-del:
 
 ### RELEASE
 
+DIST_FSPATH=$(PWD)/.release
+
+batch-release-trans:
+	# transform into flat folders. github only allow files not folders.
+	
 batch-release:
-	go install github.com/tcnksm/ghr@latest
+	go install github.com/tcnksm/ghr@v0.16.0
+
+	
+	ghr v0.4.0 .bin/windows_arm64/
+batch-release-del:
+	ghr -delete v0.1.0
+	
 
 
 
