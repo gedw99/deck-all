@@ -1,14 +1,21 @@
 # DOES THEM all in one hit...
 # this can run as a CI makefile on github workflows. we just need the outputs to go to out own S3. 
 # then nats can deploy them in real time as they are asked for by a pipleine !!
-#- nats just pulls them off S3 and paces them in the call path. like a proxy Faas
+#- nats just pulls them off S3 and places them in the call path. like a proxy Faas...
 
-BIN_FSPATH=$(PWD)/.bin
+BATCH_BIN_FSPATH=$(PWD)/.bin
 
-export PATH:=$(BIN_FSPATH)/darwin-amd64:$(PATH)
-print:
+batch-print:
+	@echo ""
+	@echo "BATCH_BIN_FSPATH:     $(BATCH_BIN_FSPATH)"
 
-all: git build dist
+	$(MAKE) batch-bin-print
+
+
+
+batch-all: batch-git batch-build-all batch-bin
+
+
 
 ### git
 
@@ -27,14 +34,11 @@ batch-git-del:
 	cd giocanvas && $(MAKE) git-upstream-clone-del
 	
 	
-### Build
+### BUILD
 
-# Pick one !!
-CMD_BUILD=go-build
-#CMD_BUILD=go-build
 
 batch-build:
-	mkdir -p $(BIN_FSPATH)
+	mkdir -p $(BATCH_BIN_FSPATH)
 	# do it alphabetically and all platform
 	cd decksh && $(MAKE) build-go
 	cd deck && $(MAKE) build-go
@@ -50,57 +54,42 @@ batch-build-clean:
 
 ### DIST
 
-batch-dist-print:
-	tree  $(BIN_FSPATH)
+batch-bin-print:
+	tree  $(BATCH_BIN_FSPATH)
 
-batch-dist:
-	mkdir -p $(BIN_FSPATH)
-	cp -r decksh/decksh__ajstarks/cmd/decksh/.bin/gobuild/* $(BIN_FSPATH)
+batch-bin:
+	mkdir -p $(BATCH_BIN_FSPATH)
+	cp -r decksh/decksh__ajstarks/cmd/decksh/.bin/gobuild/* $(BATCH_BIN_FSPATH)
 
-	cp -r deck/deck__ajstarks/cmd/deckd/.bin/gobuild/* $(BIN_FSPATH)
-	cp -r deck/deck__ajstarks/cmd/deckinfo/.bin/gobuild/* $(BIN_FSPATH)
-	cp -r deck/deck__ajstarks/cmd/deckweb/.bin/gobuild/* $(BIN_FSPATH)
-	cp -r deck/deck__ajstarks/cmd/deckweb/.bin/gobuild/* $(BIN_FSPATH)
-	#cp -r deck/deck__ajstarks/cmd/fcdeck/.bin/gobuild/* $(BIN_FSPATH)
-	#cp -r deck/deck__ajstarks/cmd/gcdeck/.bin/gobuild/* $(BIN_FSPATH)
-	cp -r deck/deck__ajstarks/cmd/pdfdeck/.bin/gobuild/* $(BIN_FSPATH)
-	cp -r deck/deck__ajstarks/cmd/pngdeck/.bin/gobuild/* $(BIN_FSPATH)
-	cp -r deck/deck__ajstarks/cmd/svgdeck/.bin/gobuild/* $(BIN_FSPATH)
+	cp -r deck/deck__ajstarks/cmd/deckd/.bin/gobuild/* $(BATCH_BIN_FSPATH)
+	cp -r deck/deck__ajstarks/cmd/deckinfo/.bin/gobuild/* $(BATCH_BIN_FSPATH)
+	cp -r deck/deck__ajstarks/cmd/deckweb/.bin/gobuild/* $(BATCH_BIN_FSPATH)
+	cp -r deck/deck__ajstarks/cmd/deckweb/.bin/gobuild/* $(BATCH_BIN_FSPATH)
+	#cp -r deck/deck__ajstarks/cmd/fcdeck/.bin/gobuild/* $(BATCH_BIN_FSPATH)
+	#cp -r deck/deck__ajstarks/cmd/gcdeck/.bin/gobuild/* $(BATCH_BIN_FSPATH)
+	cp -r deck/deck__ajstarks/cmd/pdfdeck/.bin/gobuild/* $(BATCH_BIN_FSPATH)
+	cp -r deck/deck__ajstarks/cmd/pngdeck/.bin/gobuild/* $(BATCH_BIN_FSPATH)
+	cp -r deck/deck__ajstarks/cmd/svgdeck/.bin/gobuild/* $(BATCH_BIN_FSPATH)
 	
-	cp -r giocanvas/giocanvas__ajstarks/gcdeck/.bin/giobuild/* $(BIN_FSPATH)
+	cp -r giocanvas/giocanvas__ajstarks/gcdeck/.bin/giobuild/* $(BATCH_BIN_FSPATH)
 
-batch-dist-del:
-	rm -rf $(BIN_FSPATH)
+batch-bin-del:
+	rm -rf $(BATCH_BIN_FSPATH)
+
+
 
 ### RELEASE
 
-DIST_FSPATH=$(PWD)/.release
+BATCH_RELEASE_FSPATH=$(PWD)/.release
+BATCH_RELEASE_VER=0.0.0
 
 batch-release-trans:
-	# transform into flat folders. github only allow files not folders.
+	# transform everything in .bin into flat file structure and into .release
 
 batch-release:
+	# push to github releases
 	go install github.com/tcnksm/ghr@v0.16.0
-
 	
-	ghr v0.4.0 .bin/windows_arm64/
+	ghr -debug $(BATCH_RELEASE_VER) $(BATCH_BIN_FSPATH)/darwin_amd64
 batch-release-del:
-	ghr -delete v0.1.0
-	
-
-
-
-
-deckd-run:
-	# -listen Address:port (default: localhost:1958)
-	# -dir working directory (default: ".")
-	deckd -listen localhost:8080 -dir $(PWD)
-	# http://localhost:8080/
-
-	# https://github.com/ajstarks/deck/tree/master/cmd/deckd
-
-
-decksh-run:
-	decksh -h
-gcdeck-start:
-	gcdeck -h
+	ghr -delete $(BATCH_RELEASE_VER)

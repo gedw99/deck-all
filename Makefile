@@ -39,10 +39,16 @@ this-dep-tool:
 
 
 
-# batch on the git repos.
+### BUILD
+
+# build all git repos
 include $(PWD)/batch.mk
 
-### BINARIES ( pick your OS ad ARCH)
+all: batch-all
+
+
+
+### BINARIES ( pick your OS ad ARCH )
 DIST_FSPATH=$(PWD)/.bin/darwin_amd64
 export PATH:=$(DIST_FSPATH):$(DIST_FSPATH)/gcdeck.app/Contents/MacOS:$(PATH)
 
