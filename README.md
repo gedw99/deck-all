@@ -104,6 +104,11 @@ TODO:
     └── svgdeck.exe
 ```
 
+## Releases
+
+TODO: flatten build outputs so they can be uploaded to github releases
+
+
 ## WASM RUNNERS
 
 WASM Runners: https://github.com/teamortix/golang-wasm
