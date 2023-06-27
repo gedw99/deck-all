@@ -15,7 +15,12 @@ I compile the processors to WASM so that users can run it locally in a sandbox f
 I then use NATS to run the pipeline. https://github.com/choria-io/asyncjobs for example uses nats to run pipelones of schedule or continuously.
 
 
-## future work
+## WASM RUNNERS
+
+
+WASM RUnners: https://github.com/teamortix/golang-wasm
+
+## HTML
 
 HTML output using s expressions...
 

@@ -83,7 +83,11 @@ build-go-all:
 	$(MAKE) GO_SRC_GO_BIN_NAME=gotip GO_SRC_FSPATH=$(WORK_FSPATH)/cmd/pdfdeck GO_SRC_NAME=pdfdeck go-build-all
 	$(MAKE) GO_SRC_GO_BIN_NAME=gotip GO_SRC_FSPATH=$(WORK_FSPATH)/cmd/pngdeck GO_SRC_NAME=pngdeck go-build-all
 	$(MAKE) GO_SRC_GO_BIN_NAME=gotip GO_SRC_FSPATH=$(WORK_FSPATH)/cmd/svgdeck GO_SRC_NAME=svgdeck go-build-all
-	
+
+build-clean:
+	$(MAKE) go-clean-bin-ls
+	$(MAKE) go-clean-bin-run
+
 run-go:
 	$(MAKE) go-run
 
