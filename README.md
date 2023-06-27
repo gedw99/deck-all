@@ -1,6 +1,6 @@
 # deck-all
 
-Brings together the deck bits....
+Currently only:
 
 https://github.com/ajstarks/decksh
 
@@ -8,15 +8,16 @@ https://github.com/ajstarks/decksh
 
 https://github.com/ajstarks/giocanvas
 
-Deck is designed so that each part can use STD IO and so can be piped.
 
-For Security reasons, I compile the processors to WASM as well as traditional targets.
+Deck is well designed in that each part can use STD IO and so can be piped in a chain, allowing flexibility of use cases.
+
+For Security reasons, I compile the processors to WASM as well as traditional targets. 
 
 To server the WASM and WASI19 and WASI2P, i use https://github.com/stealthrocket/wasi-go/tree/main/cmd/wasirun to wrap the wasi with a host runner.
 
 To run the pipelines, I use NATS.
 
-To Servr the pipelines, I use https://github.com/choria-io/asyncjobs to run them on a schedule or continuously jobs.
+To Server the pipelines, I use https://github.com/choria-io/asyncjobs to run them on a schedule or continuously jobs.
 
 ## Build targets
 
@@ -24,7 +25,9 @@ OS: windows, darwin, linux, js, wasi1p
 
 ARCH: amd64, arm64
 
-* TODO: linux arm64
+TODO: 
+- linux arm64
+- wasi2p
 
 ```sh
 ├── darwin_amd64
@@ -101,7 +104,7 @@ ARCH: amd64, arm64
 
 ## WASM RUNNERS
 
-WASM RUnners: https://github.com/teamortix/golang-wasm
+WASM Runners: https://github.com/teamortix/golang-wasm
 
 ## WASI runners
 
@@ -110,10 +113,9 @@ https://github.com/stealthrocket/wasi-go/tree/main/cmd/wasirun
 go install github.com/stealthrocket/wasi-go/cmd/wasirun@latest
 
 
+## HTML Rendering
 
-## HTML
-
-HTML output using s expressions...
+HTML output using s expressions piped off deck xml will allow a static HTTP output, but require a composite rendering system that needs to be worked on.
 
 https://codeberg.org/t73fde/sxpf
 - sxpf - S-Expression Framework
@@ -121,3 +123,10 @@ https://codeberg.org/t73fde/sxpf
 https://codeberg.org/t73fde/sxhtml
 - sxhtml - Generate HTML from S-Expressions
 
+## Reactivity
+
+HTMX patterns to be add, so that users can interact with the decks at runtime.
+
+https://htmx.org/
+
+https://htmx.org/examples/
