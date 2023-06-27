@@ -1,5 +1,7 @@
 # deck-all
 
+This is a batch building for Deck used in the Open Science project...
+
 Currently only:
 
 https://github.com/ajstarks/decksh
@@ -21,9 +23,9 @@ To Server the pipelines, I use https://github.com/choria-io/asyncjobs to run the
 
 ## Build targets
 
-OS: windows, darwin, linux, js, wasi1p
+OS: windows, darwin, linux
 
-ARCH: amd64, arm64
+ARCH: amd64, arm64, wasm, web_wasm, js
 
 TODO: 
 - linux arm64
