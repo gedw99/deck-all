@@ -10,9 +10,13 @@ https://github.com/ajstarks/giocanvas
 
 Deck is designed so that each part can use STD IO and so can be piped.
 
-I compile the processors to WASM so that users can run it locally in a sandbox for security / privacy.
+For Security reasons, I compile the processors to WASM as well as traditional targets.
 
-I then use NATS to run the pipeline. https://github.com/choria-io/asyncjobs for example uses nats to run pipelones of schedule or continuously.
+To server the WASM and WASI19 and WASI2P, i use https://github.com/stealthrocket/wasi-go/tree/main/cmd/wasirun to wrap the wasi with a host runner.
+
+To run the pipelines, I use NATS.
+
+To Servr the pipelines, I use https://github.com/choria-io/asyncjobs to run them on a schedule or continuously jobs.
 
 ## Build targets
 
