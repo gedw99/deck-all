@@ -10,10 +10,12 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"log"
+
 	"os"
 	"path/filepath"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
 var (
@@ -22,33 +24,51 @@ var (
 	outPath = "nil"
 )
 
+func init() {
+	// LOGGING
+	environment := os.Getenv("ENV")
+
+	if environment == "production" {
+		// for json so we can do log aggrgation
+		log.SetFormatter(&log.JSONFormatter{})
+	} else {
+		// The TextFormatter is default, you don't actually have to do this.
+		log.SetFormatter(&log.TextFormatter{})
+	}
+
+	//log.SetReportCaller(true)
+
+	// Only log the warning severity or above.
+	//log.SetLevel(log.WarnLevel)
+	//log.SetLevel(log.InfoLevel)
+	log.SetLevel(log.DebugLevel)
+}
+
 func main() {
 
-	// PATH to parse
+	// FLAGS
 	inPathFlag := flag.String("in", "", "File path to look for binaries.")
 	outPathFlag := flag.String("out", "", "File path to output zips to.")
+
 	flag.Parse()
 
 	p := *inPathFlag
 	outPath = *outPathFlag
 
+	// out is mandatory
 	if outPath == "" {
-		/*
-			fmt.Println("")
-			fmt.Println("-- OUTPATH_FLAG--")
-			fmt.Println(o)
-		*/
+
+		log.Info("OUTPATH_FLAG => ", outPath)
+
 		fmt.Println("outPath is required")
 		return
-
 	}
 
+	// in is optional, and we use the current dir if not supplied.
 	if *inPathFlag != "" {
-		/*
-			fmt.Println("")
-			fmt.Println("-- PATH_FLAG--")
-			fmt.Println(p)
-		*/
+
+		log.Info("INPATH_FLAG => ", p)
+
 		inPath = p
 	} else {
 		// CWD to parse
@@ -56,23 +76,13 @@ func main() {
 		if err != nil {
 			log.Println(err)
 		}
-		/*
-			fmt.Println("")
-			fmt.Println("-- PATH_CWD--")
-			fmt.Println(pathCwd)
-		*/
+
+		log.Info("INPATH_CWD => ", pathCwd)
+
 		inPath = pathCwd
 	}
 
-	fmt.Println("")
-	fmt.Println("-- PATH--")
-	fmt.Println(inPath)
-
-	// in
-	// /Users/apple/workspace/go/src/github.com/gedw99/deck-all/.bin
-
-	// out
-	// /Users/apple/workspace/go/src/github.com/gedw99/deck-all/.release
+	log.Debug("INPATH => ", inPath)
 
 	scan1(inPath)
 
@@ -80,8 +90,8 @@ func main() {
 
 func scan1(path string) {
 	// for inside .bin folder
-	fmt.Println("")
-	fmt.Println("-- scan1")
+
+	log.Info("-- scan1")
 
 	files, err := os.ReadDir(path)
 	if err != nil {
@@ -91,11 +101,14 @@ func scan1(path string) {
 	for _, file := range files {
 		fmt.Println(file.Name(), file.IsDir())
 
+		log.Info("visiting File Name => ", file.Name())
+		log.Info("visiting File ISDir => ", file.IsDir())
+
 		// if dir, then do it again
 		if file.IsDir() {
 			path := filepath.Join(path, file.Name())
-			fmt.Println("Path => ", path)
-			fmt.Println("Folder => ", file.Name())
+			log.Info("Path => ", path)
+			log.Info("Folder => ", file.Name())
 
 			scan2(path, file.Name())
 		}
@@ -105,9 +118,10 @@ func scan1(path string) {
 func scan2(path string, folderName string) {
 	// for inside OS_ARCH folder
 	fmt.Println("")
-	fmt.Println("-- scan2")
-	fmt.Println("path => ", path)
-	fmt.Println("folderName => ", folderName)
+
+	log.Info("-- scan2")
+	log.Info("path => ", path)
+	log.Info("folderName => ", folderName)
 
 	files, err := os.ReadDir(path)
 	if err != nil {
@@ -119,17 +133,18 @@ func scan2(path string, folderName string) {
 
 	for _, file := range files {
 		fmt.Println("")
-		fmt.Println(file.Name())
-		fmt.Println("IsDir => ", file.IsDir())
+
+		log.Info("visiting File Name => ", file.Name())
+		log.Info("visiting File ISDir => ", file.IsDir())
 
 		if file.IsDir() {
 			// zip in place, then copy it to out with prefix.
 
 			srcPath := filepath.Join(path, file.Name())
-			fmt.Println("srcPath => ", srcPath)
+			log.Info("srcPath => ", srcPath)
 
 			dstPath := filepath.Join(path, file.Name()+".zip")
-			fmt.Println("dstPath => ", dstPath)
+			log.Info("dstPath => ", dstPath)
 
 			FolderZip(srcPath, dstPath)
 
@@ -138,7 +153,7 @@ func scan2(path string, folderName string) {
 
 			err := FileCopy(dstPath, newDstPath)
 			if err != nil {
-				fmt.Println("Path => ", err)
+				log.Info("Path => ", err)
 				return
 			}
 
@@ -150,7 +165,7 @@ func scan2(path string, folderName string) {
 
 			err := FileCopy(srcPath, dstPath)
 			if err != nil {
-				fmt.Println("Path => ", err)
+				log.Info("Path => ", err)
 				return
 			}
 		}
@@ -161,9 +176,9 @@ func scan2(path string, folderName string) {
 // File copies a single file from src to dst
 func FileCopy(src, dst string) error {
 
-	fmt.Println("-- FileCopy")
-	fmt.Println("src => ", src)
-	fmt.Println("dst => ", dst)
+	log.Info("-- FileCopy")
+	log.Info("src => ", src)
+	log.Info("dst => ", dst)
 
 	var err error
 	var srcfd *os.File
@@ -190,9 +205,9 @@ func FileCopy(src, dst string) error {
 }
 
 func FolderZip(pathToZip, destinationPath string) error {
-	fmt.Println("-- FolderZip")
-	fmt.Println("pathToZip =>       ", pathToZip)
-	fmt.Println("destinationPath => ", destinationPath)
+	log.Info("-- FolderZip")
+	log.Info("pathToZip =>       ", pathToZip)
+	log.Info("destinationPath => ", destinationPath)
 
 	destinationFile, err := os.Create(destinationPath)
 	if err != nil {

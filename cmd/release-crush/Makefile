@@ -8,16 +8,23 @@ IN=$(PWD)/in
 OUT=$(PWD)/out
 #OUT=/Users/apple/workspace/go/src/github.com/gedw99/deck-all/.release
 
+# pick on for logging
+#export ENV=production
+export ENV=
+
 clean:
-	rm -rf $(OUT)
+	rm -rf $(IN)
 	rm -rf $(OUT)
 in-prime:
 	# copy test data in.
 	rm -rf $(IN)
 	mkdir -p $(IN)
 	
-	cp -r $(IN_TEST)/darwin_amd64 $(IN)
-	cp -r $(IN_TEST)/web_wasm $(IN)
+	#cp -r $(IN_TEST)/darwin_amd64 $(IN)
+	#cp -r $(IN_TEST)/web_wasm $(IN)
+
+	cp -r $(IN_TEST)/* $(IN)
+	
 out-prime:
 	rm -rf $(OUT)
 	mkdir -p $(OUT)

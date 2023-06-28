@@ -56,6 +56,9 @@ batch-build-clean:
 ### BIN
 
 batch-bin-print:
+	@echo ""
+	@echo "BATCH_BIN_FSPATH:     $(BATCH_BIN_FSPATH)"
+	@echo ""
 	tree  $(BATCH_BIN_FSPATH)
 
 batch-bin:
@@ -85,20 +88,24 @@ batch-bin-del:
 BATCH_RELEASE_FSPATH=$(PWD)/.release
 BATCH_RELEASE_VER=0.0.0
 
-batch-release-trans:
-	# transform everything in .bin into flat file structure and into .release
+batch-release-print:
+	@echo ""
+	@echo "BATCH_RELEASE_FSPATH:     $(BATCH_RELEASE_FSPATH)"
+	@echo ""
+	tree $(BATCH_RELEASE_FSPATH)
 
-	# folders like .app and .web have to be zipped. Unzip it on the oether side
+batch-release-clean:
+	rm -rf $(BATCH_RELEASE_FSPATH)
+	mkdir -p $(BATCH_RELEASE_FSPATH)
+batch-release-crush: batch-release-clean
+	# cruch the folder structure in .bin, then we can upload to github
+	cd ./cmd/release-crush && go run . --in $(BATCH_BIN_FSPATH) --out $(BATCH_RELEASE_FSPATH)
 
-	# Later get pkg and msi working..
-
-	# OS_ARCH_binname.ext is best...
-
-
-batch-release:
+batch-release-push:
 	# push to github releases
 	go install github.com/tcnksm/ghr@v0.16.0
 	
-	ghr -debug $(BATCH_RELEASE_VER) $(BATCH_BIN_FSPATH)/darwin_amd64
+	ghr -debug $(BATCH_RELEASE_VER) $(BATCH_RELEASE_FSPATH)
+	
 batch-release-del:
 	ghr -delete $(BATCH_RELEASE_VER)
